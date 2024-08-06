@@ -11,7 +11,7 @@ app.get('/v1/user/:id', (request, res) => {
     console.log('request.url', request.url) // debug
     console.log('request.params.id', request.params.id)
 
-    const mysql = require('mysql2');
+    const mysql = require('mysql');
 
     // Crie uma conexão com o banco de dados
     const connection = mysql.createConnection({
