@@ -1,15 +1,15 @@
 const {Sequelize,DataTypes} = require('sequelize');
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const sequelize = new Sequelize('db_gabriel', 'db_gabriel_user', 'iyBctafJBsR8OplytROsyXFBUC3LGZlG',{
-    host: 'dpg-cqp1g988fa8c73c4n2qg-a.oregon-postgres.render.com',
+// postgresql://db_gabriel_user:iyBctafJBsR8OplytROsyXFBUC3LGZlG@dpg-cqp1g988fa8c73c4n2qg-a/db_gabriel
+
+const sequelize = new Sequelize('db_gabriel', 'db_gabriel_user', '',{
+    host: 'dpg-cqp1g988fa8c73c4n2qg-a',
     dialect: 'postgres',
-    logging: true,
-    dialectOptions: {
-        supportBigNumbers: true,
-        ssl: {
-            rejectUnauthorized: false,
-        }
-    },
+    port: 3000,
+    logging: false,
 });
 
 const User = sequelize.define('User', {
@@ -31,11 +31,6 @@ const User = sequelize.define('User', {
     tableName: 'users',
     timestamps: false,
 });
-
-const express = require('express');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
