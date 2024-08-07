@@ -1,112 +1,62 @@
-const {Sequelize,DataTypes} = require('sequelize');
+const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3015;
 
-// postgresql://db_gabriel_user:iyBctafJBsR8OplytROsyXFBUC3LGZlG@dpg-cqp1g988fa8c73c4n2qg-a/db_gabriel
-
-const sequelize = new Sequelize('db_gabriel', 'db_gabriel_user', '',{
-    host: 'dpg-cqp1g988fa8c73c4n2qg-a',
+// Substitua com suas informações do Supabase
+const sequelize = new Sequelize('postgres://<username>:<password>@<host>:<port>/<database>', {
     dialect: 'postgres',
-    port: 3000,
-    logging: false,
+    logging: true, // Você pode desativar isso se não precisar de logs SQL
 });
 
-const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    emai: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-}, {
-    tableName: 'users',
-    timestamps: false,
+// Middleware
+app.use(cors());
+app.use(express.json()); // Para lidar com JSON em requisições POST
+
+// Rota de exemplo
+app.get('/', (req, res) => {
+    res.send('Olá, mundo');
 });
 
-app.use(express.json());
-
-// Sincronize os modelos com o banco de dados
-sequelize.sync({ alter: true })
-    .then(() => {
-        console.log('Banco de dados sincronizado');
-    })
-    .catch(err => {
-        console.error('Erro ao sincronizar o banco de dados:', err);
-    });
-
-// Adicionar um novo usuário
-app.post('/users', async (req, res) => {
+// Rota para obter usuário por ID
+app.get('/v1/user/:id', async (req, res) => {
     try {
-        const user = await User.create(req.body);
-        res.status(201).json(user);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const { id } = req.params;
+        console.log('request.url', req.url); // debug
+        console.log('request.params.id', id);
+
+        const result = await sequelize.query('SELECT * FROM users WHERE id = :id', {
+            replacements: { id },
+            type: QueryTypes.SELECT,
+        });
+        res.send(result);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Erro ao buscar usuário');
     }
 });
 
-// Buscar todos os usuários
-app.get('/users', async (req, res) => {
+// Rota para criar um usuário
+app.post('/v1/user/:name', async (req, res) => {
     try {
-        const users = await User.findAll();
-        res.status(200).json(users);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const { name } = req.params;
+        console.log('request.url', req.url); // debug
+        console.log('request.params.name', name);
+
+        const email = name + '@example.com'; // Exemplo de e-mail, ajuste conforme necessário
+        await sequelize.query('INSERT INTO users (name, email) VALUES (:name, :email)', {
+            replacements: { name, email },
+            type: QueryTypes.INSERT,
+        });
+        res.status(201).send('Usuário criado com sucesso');
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).send('Erro ao criar usuário');
     }
 });
 
-// Buscar um usuário por ID
-app.get('/users/:id', async (req, res) => {
-    try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            res.status(200).json(user);
-        } else {
-            res.status(404).json({ error: 'Usuário não encontrado' });
-        }
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Atualizar um usuário por ID
-app.put('/users/:id', async (req, res) => {
-    try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            await user.update(req.body);
-            res.status(200).json(user);
-        } else {
-            res.status(404).json({ error: 'Usuário não encontrado' });
-        }
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Deletar um usuário por ID
-app.delete('/users/:id', async (req, res) => {
-    try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            await user.destroy();
-            res.status(204).send();
-        } else {
-            res.status(404).json({ error: 'Usuário não encontrado' });
-        }
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
 });
