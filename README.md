@@ -2,7 +2,9 @@
 
 iniciando projeto
 
-link - https://github.com/digitalcollegebr/projeto-backend
+passos do projeto base - https://github.com/digitalcollegebr/projeto-backend
+
+# colaboradores
 
 - carlos - [albertverso](https://github.com/albertverso)
 - gabriel - [henriquedev24](https://github.com/henriquedev24)
