@@ -1,11 +1,11 @@
 const {
-    USER,
-    PASSWORD,
+    USUARIO,
+    SENHA,
     HOST,
-    PORT,
-    BASE
+    PORTA,
+    BANCO
 } = process.env
 
 module.exports = {
-    uri: 'postgresql://postgres.pyfqdcxapmkceocjyeou:project-backend@aws-0-sa-east-1.pooler.supabase.com:6543/postgres'
+    uri: 'postgresql://'+USUARIO+':'+SENHA+'@'+HOST+':'+PORTA+'/'+BANCO
 }

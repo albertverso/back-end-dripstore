@@ -10,7 +10,7 @@ app.get('/v1/user/:id', (request, res) => {
     console.log('request.url', request.url) // debug
     console.log('request.params.id', request.params.id)
 
-    User.findOne({ where: { id: request.params.id } })
+    User.findAll({ where: { id: request.params.id } })
         .then((result) => res.send(result))
 })
 
