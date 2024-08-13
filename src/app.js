@@ -1,106 +1,14 @@
-const express = require('express')
-var cors = require('cors')
-var bodyParser = require('body-parser')
-// DESESTRUTURACAO
-const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
-const app = express()
-const port = 10000
+require('dotenv').config()
 
-const sequelize = new Sequelize('postgresql://postgres.yhogvuqcegpuxhumgkyn:' + 'chuchu-banco-vai-dar-bom' + '@aws-0-us-west-1.pooler.supabase.com:6543/postgres');
+const jwt = require('jsonwebtoken');
 
-const User = sequelize.define(
-    'User',
-    {
-        firstname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        surname: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false
-        }
-    },
-    {
-        timestamps: true
-    },
-);
+require('./routes/authRoutes')
+require('./routes/userRoutes')
+require('./routes/productRoutes')
 
-
-const Category = sequelize.define(
-    'Category',
-    {
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        slug: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        use_in_menu: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
-        },
-    },
-    {
-        timestamps: true
-    },
-);
+const app = require('./routes/app-express')
+const PORT = process.env.PORT || 10000
 
 
 
-// Sincronizar o modelo com o banco de dados    
-sequelize.sync();
-
-app.use(bodyParser.json()) // middleware
-app.use(cors()) // middleware
-
-
-app.get('/', (req, res) => {
-    res.send('Olá, mundo')
-})
-
-app.get('/v1/user/:id', (request, res) => {
-    console.log('request.url', request.url) // debug
-    console.log('request.params.id', request.params.id)
-
-    User.findOne({ where: { id: request.params.id } })
-        .then((result) => res.send(result))
-})
-
-
-app.post('/v1/user', (request, res) => {
-    console.log('request.url', request.url) // debug
-    console.log('request.body', request.body)
-    // res.send(request.body)
-    User.create(request.body).then((result) => res.status(201).send(result))
-
-})
-
-
-app.put('/v1/user/:id', (request, res) => {
-    console.log('request.url', request.url) // debug
-    console.log('request.body', request.body)
-    User.update(request.body, { where: { id: request.params.id } }).then((result) => res.send(result))
-})
-
-app.delete('/v1/user/:id', (request, res) => {
-    console.log('request.url', request.url) // debug
-    User.destroy({ where: { id: request.params.id } }).then((result) => {
-        res.send('deletei com sucesso essa quantidade de linhas: '+result)
-    })
-})
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+app.listen(PORT, ()=> { console.log('http://localhost:'+PORT)})
