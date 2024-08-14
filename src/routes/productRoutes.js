@@ -3,7 +3,7 @@ const app = require('./appexpress.js')
 const { Product } = require('../models/models.js');
 
 app.get('/', (req, res) => {
-    res.send('Olá, mundo')
+    res.send('Ta iniciando')
 })
 
 app.get('/v1/product/search', async(req, res) => {

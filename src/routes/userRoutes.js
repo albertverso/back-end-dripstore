@@ -3,7 +3,7 @@ const app = require('./appexpress.js')
 const { User } = require('../models/models.js');
 
 app.get('/', (req, res) => {
-    res.send('Olá, mundo')
+    res.send('Ta iniciando')
 })
 
 app.get('/v1/user/:id', (request, res) => {

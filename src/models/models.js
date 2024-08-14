@@ -1,8 +1,7 @@
-const { uri } = require('../config/config.js');
 
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize(uri);
+const sequelize = new Sequelize('postgresql://postgres.pyfqdcxapmkceocjyeou:projeto-backend@aws-0-sa-east-1.pooler.supabase.com:6543/postgres');
 
 const User = sequelize.define(
     'User',
@@ -98,39 +97,74 @@ const Product = sequelize.define(
     timestamps: true // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
   });
 
-  const ProductCategory = sequelize.define('ProductCategory', {
-    product_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Product,
-        key: 'id'
-      },
-      onDelete: 'CASCADE',
-      allowNull: false
+  const ProductOption = sequelize.define('ProductOption', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
-    category_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Category,
-        key: 'id'
-      },
-      onDelete: 'CASCADE',
-      allowNull: false
+    product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Products', // Nome da tabela de produtos
+            key: 'id'
+        }
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    shape: {
+        type: DataTypes.ENUM('square', 'circle'),
+        defaultValue: 'square'
+    },
+    radius: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    type: {
+        type: DataTypes.ENUM('text', 'color'),
+        defaultValue: 'text'
+    },
+    values: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
-  }, {
-    tableName: 'produtos_categoria', // Nome da tabela no banco de dados
-    timestamps: true, // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
-    indexes: [
-      {
-        unique: true,
-        fields: ['product_id', 'category_id']
-      }
-    ]
-  });
+});
+const ProductImage = sequelize.define('ProductImage', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Products',
+            key: 'id'
+        }
+    },
+    enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    path: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+},);
   
   // Estabelece as relações
-  Product.belongsToMany(Category, { through: ProductCategory, foreignKey: 'category_id' });
-  Category.belongsToMany(Product, { through: ProductCategory, foreignKey: 'product_id' });
+  Product.hasMany(ProductImage, { foreignKey: 'product_id' });
+ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
+
+Product.hasMany(ProductOption, { foreignKey: 'product_id' });
+ProductOption.belongsTo(Product, { foreignKey: 'product_id' });
+
+Category.belongsToMany(Product, { through: 'ProdutoCategoria', foreignKey: 'category_id' });
+Product.belongsToMany(Category, { through: 'ProdutoCategoria', foreignKey: 'product_id' });
   
 
 // Sincronizar o modelo com o banco de dados    
@@ -147,5 +181,4 @@ module.exports ={
     User,
     Category,
     Product,
-    ProductCategory
 }

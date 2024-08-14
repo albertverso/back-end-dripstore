@@ -3,7 +3,7 @@ const app = require('./appexpress.js')
 const { Category } = require('../models/models.js');
 
 app.get('/', (req, res) => {
-    res.send('Olá, mundo')
+    res.send('Ta iniciando')
 })
 
 app.get('/v1/category/:id', (request, res) => {
