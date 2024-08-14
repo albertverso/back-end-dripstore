@@ -29,7 +29,7 @@ const Categoria = sequelize.define('Categoria', {
   });
 
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync();
+sequelize.sync({ alter: true }); // Usa alter para ajustar a tabela existente
 
 module.exports ={
     Categoria

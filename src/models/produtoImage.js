@@ -1,4 +1,5 @@
 const { uri } = require('../config/database.js');
+const {Produto} = require('../models/produto.js');
 
 const { Sequelize, DataTypes } = require('sequelize');
 
@@ -32,8 +33,12 @@ const ProdutoImage = sequelize.define('ProdutoImage', {
     timestamps: true // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
   });
 
+// Estabelece a relação de chave estrangeira
+Produto.hasMany(ProdutoOption, { foreignKey: 'produto_id' });
+ProdutoImage.belongsTo(Produto, { foreignKey: 'produto_id' });
+
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync();
+sequelize.sync({ alter: true }); // Usa alter para ajustar a tabela existente
 
 module.exports ={
     ProdutoImage

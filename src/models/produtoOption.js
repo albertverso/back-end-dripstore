@@ -51,7 +51,7 @@ const ProdutoOption = sequelize.define('ProdutoOption', {
   ProdutoOption.belongsTo(Produto, { foreignKey: 'produto_id' });
 
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync();
+sequelize.sync({ alter: true }); // Usa alter para ajustar a tabela existente
 
 module.exports ={
     ProdutoOption
