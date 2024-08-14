@@ -34,7 +34,7 @@ const ProdutoImage = sequelize.define('ProdutoImage', {
   });
 
 // Estabelece a relação de chave estrangeira
-Produto.hasMany(ProdutoOption, { foreignKey: 'produto_id' });
+Produto.hasMany(ProdutoImage, { foreignKey: 'produto_id' });
 ProdutoImage.belongsTo(Produto, { foreignKey: 'produto_id' });
 
 // Sincronizar o modelo com o banco de dados    

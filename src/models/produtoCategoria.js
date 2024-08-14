@@ -40,7 +40,6 @@ const ProdutoCategoria = sequelize.define('ProdutoCategoria', {
   // Estabelece as relações
   Produto.belongsToMany(Categoria, { through: ProdutoCategoria, foreignKey: 'product_id' });
   Categoria.belongsToMany(Produto, { through: ProdutoCategoria, foreignKey: 'category_id' });
-  
 
 // Sincronizar o modelo com o banco de dados    
 sequelize.sync({ alter: true }); // Usa alter para ajustar a tabela existente

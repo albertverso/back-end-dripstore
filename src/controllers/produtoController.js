@@ -2,7 +2,10 @@ const {Produto} = require('../models/produto')
 
 // Adicionar uma nova categoria
 const CreateProduct = async (req, res) => {
-    Produto.create(req.body).then((result) => res.status(201).send(result))
+    const result = await Produto.create(req.body);
+
+   await result.addCategoria(req.body.category_ids);
+    res.status(201).send(result);
   };
   
 // Buscar todos os categorias
