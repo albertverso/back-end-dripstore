@@ -8,8 +8,10 @@ app.get('/', (req, res) => {
 
 app.get('/v1/product/search', async(req, res) => {
     console.log(req.query)
-    const produtos = await Product.findAll({limit: req.query.limit})
+    const produtos = await Product.findAll({limit: 30})
     
+    Product.findAll({where: {id: request.params.id}})
+    res.send(produtos)
 })
 
 app.get('/v1/product/:id', (request, res) => {
@@ -20,20 +22,12 @@ app.get('/v1/product/:id', (request, res) => {
         .then((result) => res.send(result))
 })
 
-app.get('/v1/product/search', (request, res) => {
-    console.log('request.url', request.url)
-
-    Product.findAll()
-        .then((result) => res.send(result))
-})
-
 app.post('/v1/product', (request, res) => {
-    console.log('request.url', request.url) // debug
+    console.log('request.url', request.url)
     console.log('request.body', request.body)
 
     Product.create(request.body).then((result) => res.status(201).send(result))
 })
-
 
 app.put('/v1/product/:id', (request, res) => {
     console.log('request.url', request.url) // debug

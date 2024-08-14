@@ -1,14 +1,13 @@
 require('dotenv').config()
 
-const jwt = require('jsonwebtoken');
-
-require('./routes/authRoutes')
 require('./routes/userRoutes')
 require('./routes/productRoutes')
-
-const app = require('./routes/app-express')
-const PORT = process.env.PORT || 10000
+require('./routes/categoryRoutes')
 
 
+const app = require('./routes/appexpress')
+const PORTA = process.env.PORTA || 10000
 
-app.listen(PORT, ()=> { console.log('http://localhost:'+PORT)})
+
+
+app.listen(PORTA, ()=> { console.log('http://localhost:'+PORTA)})

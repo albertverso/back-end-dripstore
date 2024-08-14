@@ -1,11 +1,5 @@
-const {
-    USUARIO,
-    SENHA,
-    HOST,
-    PORTA,
-    BANCO
-} = process.env
+const {PORTA, HOST, USUARIO, SENHA, BANCO} = process.env
 
 module.exports = {
-    uri: 'postgresql://'+USUARIO+':'+SENHA+'@'+HOST+':'+PORTA+'/'+BANCO
+    uri: `postgres://${USUARIO}:${SENHA}@${HOST}:${PORTA}/${BANCO}`
 }
