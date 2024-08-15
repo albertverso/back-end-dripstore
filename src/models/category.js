@@ -1,11 +1,11 @@
 const { uri } = require('../config/database.js');
-
+const {Product} = require('../models/product.js');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(uri);
 
 // Criando a tabela categorias
-const Categoria = sequelize.define('Categoria', {
+const Category = sequelize.define('Category', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -24,13 +24,16 @@ const Categoria = sequelize.define('Categoria', {
       defaultValue: false
     }
   }, {
-    tableName: 'categorias', // Nome da tabela no banco de dados
     timestamps: true // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
   });
 
+
+Product.belongsToMany(Category, { through: "ProductCategory", foreignKey: 'product_id' });
+Category.belongsToMany(Product, { through: "ProductCategory", foreignKey: 'category_id' });
+
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync({ alter: true }); // Usa alter para ajustar a tabela existente
+sequelize.sync(); // Usa alter para ajustar a tabela existente
 
 module.exports ={
-    Categoria
+  Category
 }

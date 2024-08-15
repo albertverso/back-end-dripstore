@@ -1,5 +1,5 @@
-const app = require('../routes/app-express')
-const {CreateUser, SearchUserAll, SearchUserId, UpdateUser, DeleteUser} = require('../controllers/usuarioControllers')
+const app = require('./app-express')
+const {CreateUser, SearchUserAll, SearchUserId, UpdateUser, DeleteUser} = require('../controllers/userControllers')
 
 // Adicionar um novo usuário
 app.post('/v1/user', CreateUser);

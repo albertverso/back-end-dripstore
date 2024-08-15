@@ -1,13 +1,13 @@
 // controllers/authController.js
 const jwt = require('jsonwebtoken');
-const {Usuario} = require('../models/usuarios');
+const {User} = require('../models/user');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     // Verificar se o usuário existe
-    const user = await Usuario.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
