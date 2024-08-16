@@ -1,7 +1,10 @@
 
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('postgresql://postgres.pyfqdcxapmkceocjyeou:projeto-backend@aws-0-sa-east-1.pooler.supabase.com:6543/postgres');
+const {url} = require('../config/config')
+
+
+const sequelize = new Sequelize(url)
 
 const User = sequelize.define(
     'User',
@@ -29,7 +32,6 @@ const User = sequelize.define(
     },
 );
 
-
 const Category = sequelize.define(
     'Category',
     {
@@ -55,49 +57,51 @@ const Category = sequelize.define(
 const Product = sequelize.define(
     'Product', 
     {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        enabled: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        name: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        slug: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        use_in_menu: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        stock: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true // Permite que o campo seja nulo
+        },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
+        price_with_discount: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        }
     },
-    enabled: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    name: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    slug: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    use_in_menu: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true // Permite que o campo seja nulo
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false
-    },
-    price_with_discount: {
-      type: DataTypes.FLOAT,
-      allowNull: false
+    {
+        tableName: 'produtos', // Nome da tabela no banco de dados
+        timestamps: true // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
     }
-  }, {
-    tableName: 'produtos', // Nome da tabela no banco de dados
-    timestamps: true // Define se a tabela deve ter colunas `createdAt` e `updatedAt`
-  });
+);
 
-  const ProductOption = sequelize.define('ProductOption', {
+const ProductOption = sequelize.define('ProductOption', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -107,7 +111,7 @@ const Product = sequelize.define(
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products', // Nome da tabela de produtos
+            model: 'produtos', // Nome da tabela de produtos
             key: 'id'
         }
     },
@@ -132,6 +136,7 @@ const Product = sequelize.define(
         allowNull: false
     }
 });
+
 const ProductImage = sequelize.define('ProductImage', {
     id: {
         type: DataTypes.INTEGER,
@@ -142,7 +147,7 @@ const ProductImage = sequelize.define('ProductImage', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products',
+            model: 'produtos', // Nome da tabela de produtos
             key: 'id'
         }
     },
@@ -154,10 +159,10 @@ const ProductImage = sequelize.define('ProductImage', {
         type: DataTypes.STRING,
         allowNull: false
     }
-},);
-  
-  // Estabelece as relações
-  Product.hasMany(ProductImage, { foreignKey: 'product_id' });
+});
+
+// Estabelece as relações
+Product.hasMany(ProductImage, { foreignKey: 'product_id' });
 ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
 
 Product.hasMany(ProductOption, { foreignKey: 'product_id' });
@@ -165,20 +170,18 @@ ProductOption.belongsTo(Product, { foreignKey: 'product_id' });
 
 Category.belongsToMany(Product, { through: 'ProdutoCategoria', foreignKey: 'category_id' });
 Product.belongsToMany(Category, { through: 'ProdutoCategoria', foreignKey: 'product_id' });
-  
 
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync({alter: true})
+sequelize.sync({ alter: true })
   .then(() => {
-    console.log('Conectou')
+    console.log('Conectado e sincronizado com sucesso');
   })
   .catch(error => {
-    console.error('Conexão falhou', error)
+    console.error('Falha na conexão', error);
   });
 
-
-module.exports ={
+module.exports = {
     User,
     Category,
-    Product,
-}
+    Product
+};
