@@ -159,17 +159,39 @@ const ProductImage = sequelize.define('ProductImage', {
         type: DataTypes.STRING,
         allowNull: false
     }
+<<<<<<< HEAD
 });
 
 // Estabelece as relações
 Product.hasMany(ProductImage, { foreignKey: 'product_id' });
 ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
+=======
+},);
 
-Product.hasMany(ProductOption, { foreignKey: 'product_id' });
-ProductOption.belongsTo(Product, { foreignKey: 'product_id' });
 
+  
+  // Estabelece as relações
+  Product.hasMany(ProductImage, { foreignKey: "product_id" });
+ProductImage.belongsTo(Product, { foreignKey: "product_id" });
+>>>>>>> b1094bbb9a18caa9c9f5bb68e81fa5eed5b90696
+
+Product.hasMany(ProductOption, { foreignKey: "product_id" });
+ProductOption.belongsTo(Product, { foreignKey: "product_id" });
+
+<<<<<<< HEAD
 Category.belongsToMany(Product, { through: 'ProdutoCategoria', foreignKey: 'category_id' });
 Product.belongsToMany(Category, { through: 'ProdutoCategoria', foreignKey: 'product_id' });
+=======
+Category.belongsToMany(Product, {
+  through: "ProdutoCategoria",
+  foreignKey: "category_id",
+});
+Product.belongsToMany(Category, {
+  through: "ProdutoCategoria",
+  foreignKey: "product_id",
+});
+  
+>>>>>>> b1094bbb9a18caa9c9f5bb68e81fa5eed5b90696
 
 // Sincronizar o modelo com o banco de dados    
 sequelize.sync({ alter: true })
