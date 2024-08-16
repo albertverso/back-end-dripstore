@@ -5,7 +5,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(uri);
 
 // Criando a tabela usuarios
-const Usuario = sequelize.define('Usuario', {
+const User = sequelize.define('User', {
     // Definição dos atributos do modelo
     id: {
       type: DataTypes.INTEGER,
@@ -33,14 +33,12 @@ const Usuario = sequelize.define('Usuario', {
       allowNull: false,
     },
   }, {
-     // Outras opções do modelo
-    tableName: 'usuarios', // Nome da tabela no banco de dados
     timestamps: true, // Defina como `true` se você usar timestamps
   });
 
 // Sincronizar o modelo com o banco de dados    
-sequelize.sync();
+sequelize.sync(); // Usa alter para ajustar a tabela existente
 
 module.exports ={
-    Usuario
+    User
 }

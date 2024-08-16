@@ -1,5 +1,5 @@
-const app = require('../routes/app-express')
-const {CreateCategory, SearchCategoryAll, SearchCategoryId, UpdateCategory, DeleteCategory} = require('../controllers/categoriaController')
+const app = require('./app-express')
+const {CreateCategory, SearchCategoryAll, SearchCategoryId, UpdateCategory, DeleteCategory} = require('../controllers/categoryController')
 
 // Adicionar uma nova categoria
 app.post('/v1/category', CreateCategory);

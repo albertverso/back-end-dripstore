@@ -1,5 +1,5 @@
-const app = require('../routes/app-express')
-const {CreateProduct, SearchProductAll, SearchProductId, UpdateProduct, DeleteProduct} = require('../controllers/produtoController')
+const app = require('./app-express')
+const {CreateProduct, SearchProductAll, SearchProductId, UpdateProduct, DeleteProduct} = require('../controllers/productController')
 
 // Adicionar uma nova categoria
 app.post('/v1/product', CreateProduct);
