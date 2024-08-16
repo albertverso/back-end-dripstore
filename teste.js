@@ -1,12 +1,19 @@
+require('dotenv').config();
 const {Sequelize } =  require("sequelize")
 
-
-const b = new Sequelize('postgres://postgres.ehtducsjvbqibjyhjrkp:projeto-backend@aws-0-sa-east-1.pooler.supabase.com:6543/postgres', {
-    dialect : "postgres"
+const sequelize = new Sequelize('postgresql://postgres.ehtducsjvbqibjyhjrkp:projeto-backend@aws-0-sa-east-1.pooler.supabase.com:6543/postgres', {
+    dialect : "postgresql",
+    host: process.env.HOST,
+    logging: console.log,
 })
 
-b.authenticate(()=>{
-    console.log("deue bom");
-    
-}).catch(erro => console.log(erro)
-)
+async function testConnection() {
+    try {
+      await sequelize.authenticate();
+      console.log('Conexão com o banco de dados foi bem-sucedida.');
+    } catch (error) {
+      console.error('Não foi possível conectar ao banco de dados:', error);
+    }
+  }
+  
+  testConnection();
