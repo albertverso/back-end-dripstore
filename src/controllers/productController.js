@@ -48,7 +48,6 @@ const CreateProduct = async (req, res) => {
                 value: option.value.replace(/[{}]/g, '').split(',')
             }))
         };
-
         res.status(201).send(responseBody);
     }catch (error){
         res.status(500).json({ error: 'Erro ao criar o produto.' });
@@ -110,19 +109,31 @@ const SearchProductAll = async (req, res) => {
 
 // Buscar um produtos por ID
 const SearchProductId =  async (req, res) => {
-    Product.findOne({ where: { id: req.params.id } }).then((result) => res.send(result))
+    try {
+        Product.findOne({ where: { id: req.params.id } }).then((result) => res.send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar produto' });
+    }
 };
 
 // Atualizar uma produtos por ID
 const UpdateProduct =  async (req, res) => {
-    Product.update(req.body, { where: { id: req.params.id } }).then((result) => res.send(result))
+    try {
+        Product.update(req.body, { where: { id: req.params.id } }).then((result) => res.send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar produto' });
+    }
 };
 
 // Deletar uma produtos por ID
 const DeleteProduct =  async (req, res) => {
-    Product.destroy({ where: { id: req.params.id } }).then((result) => {
-        res.send('deletei com sucesso essa quantidade de linhas: '+result)
-    })
+    try {
+        Product.destroy({ where: { id: req.params.id } }).then((result) => {
+            res.send('deletei com sucesso essa quantidade de linhas: '+result)
+        })
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao deletar produto' });
+    }
 };
 
 module.exports = {

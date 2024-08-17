@@ -2,29 +2,49 @@ const {Category} = require('../models/category')
 
 // Adicionar uma nova categoria
 const CreateCategory = async (req, res) => {
-    Category.create(req.body).then((result) => res.status(201).send(result))
+    try {
+        Category.create(req.body).then((result) => res.status(201).send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao criar categoria' });
+    }
   };
   
 // Buscar todos os categorias
 const SearchCategoryAll = async (req, res) => {
-    Category.findAll().then((result) => res.send(result))
+    try {
+        Category.findAll().then((result) => res.send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar todas as categorias' });
+    }
 };
 
 // Buscar um Category por ID
 const SearchCategoryId = async (req, res) => {
-    Category.findOne({ where: { id: req.params.id } }).then((result) => res.send(result))
+    try {
+        Category.findOne({ where: { id: req.params.id } }).then((result) => res.send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao burcar categoria' });
+    }
 };
 
 // Atualizar uma Category por ID
 const UpdateCategory = async (req, res) => {
-    Category.update(req.body, { where: { id: req.params.id } }).then((result) => res.send(result))
+    try {
+        Category.update(req.body, { where: { id: req.params.id } }).then((result) => res.send(result))
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar categoria' });
+    }
 };
 
 // Deletar uma Category por ID
 const DeleteCategory = async (req, res) => {
-    Category.destroy({ where: { id: req.params.id } }).then((result) => {
-        res.send('deletei com sucesso essa quantidade de linhas: '+result)
-    })
+    try {
+        Category.destroy({ where: { id: req.params.id } }).then((result) => {
+            res.send('deletei com sucesso essa quantidade de linhas: '+result)
+        })
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao deletar categoria' });
+    }
 };
 
 module.exports = {
