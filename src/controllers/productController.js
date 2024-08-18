@@ -1,5 +1,6 @@
 const { types } = require('pg');
-const {Product, ProductImage, ProductOption} = require('../models/product')
+const {Product, ProductImage, ProductOption} = require('../models/product');
+const { Category } = require('../models/category');
 
 // Adicionar uma novo produto
 const CreateProduct = async (req, res) => {
@@ -86,6 +87,9 @@ const SearchProductAll = async (req, res) => {
                 });
                 productData.images = images.map(image => image.toJSON());
             }
+          
+            const categories = await product.getCategories(); // Usando o método de associação
+            productData.categories = categories.map(category => category.toJSON());
 
             // Incluir opções se solicitado
             if (includeOptions) {
