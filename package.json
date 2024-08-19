@@ -1,4 +1,14 @@
 {
+   "name": "back-end-dripstore",
+  "description": "iniciando projeto",
+  "version": "1.0.0",
+  "main": "teste.js",
+  "keywords": [],
+  "scripts": {
+    "start": "nodemon src/server.js"
+},  
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -10,8 +20,5 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.4"
-  },
-  "scripts": {
-    "start": "nodemon app.js"
   }
 }

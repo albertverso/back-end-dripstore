@@ -1,7 +1,17 @@
-const app = require('./routes/appexpress');
+require('dotenv').config();
+const {Sequelize } =  require("sequelize")
 
-const port = process.env.PORTA || 10000
+const sequelize = new Sequelize('postgresql://postgres.ehtducsjvbqibjyhjrkp:projeto-backend@aws-0-us-west-1.pooler.supabase.com:6543/postgres', {
+  dialect: 'postgresql'
+})
 
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+async function testConnection() {
+    try {
+      await sequelize.authenticate();
+      console.log('Deu certo');
+    } catch (error) {
+      console.error('Não foi possível conectar ao banco de dados:', error);
+    }
+  }
+  
+  testConnection();
