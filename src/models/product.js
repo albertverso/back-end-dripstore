@@ -112,7 +112,7 @@ const ProductImage = sequelize.define('ProductImage', {
     defaultValue: false
   },
   path: {
-    type: DataTypes.STRING(1000),
+    type: DataTypes.TEXT('long'),
     allowNull: false
   }
 }, {
